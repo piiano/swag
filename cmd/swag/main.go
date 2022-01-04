@@ -7,10 +7,11 @@ import (
 	"os"
 	"strings"
 
+	"github.com/urfave/cli/v2"
+
 	"github.com/piiano/swag"
 	"github.com/piiano/swag/format"
 	"github.com/piiano/swag/gen"
-	"github.com/urfave/cli/v2"
 )
 
 const (
