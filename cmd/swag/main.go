@@ -6,11 +6,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/urfave/cli/v2"
-
 	"github.com/swaggo/swag"
 	"github.com/swaggo/swag/format"
 	"github.com/swaggo/swag/gen"
+	"github.com/urfave/cli/v2"
 )
 
 const (
@@ -75,17 +74,17 @@ var initFlags = []cli.Flag{
 		Aliases: []string{"pd"},
 		Usage:   "Parse go files inside dependency folder, disabled by default",
 	},
-	&cli.StringFlag{
+	&cli.StringSliceFlag{
 		Name:    markdownFilesFlag,
 		Aliases: []string{"md"},
-		Value:   "",
-		Usage:   "Parse folder containing markdown files to use as description, disabled by default",
+		Value:   nil,
+		Usage:   "Parse folders containing markdown files to use as description, disabled by default",
 	},
-	&cli.StringFlag{
+	&cli.StringSliceFlag{
 		Name:    codeExampleFilesFlag,
 		Aliases: []string{"cef"},
-		Value:   "",
-		Usage:   "Parse folder containing code example files to use for the x-codeSamples extension, disabled by default",
+		Value:   nil,
+		Usage:   "Parse folders containing code example files to use for the x-codeSamples extension, disabled by default",
 	},
 	&cli.BoolFlag{
 		Name:  parseInternalFlag,
@@ -127,21 +126,21 @@ func initAction(c *cli.Context) error {
 	}
 
 	return gen.New().Build(&gen.Config{
-		SearchDir:           c.String(searchDirFlag),
-		Excludes:            c.String(excludeFlag),
-		MainAPIFile:         c.String(generalInfoFlag),
-		PropNamingStrategy:  strategy,
-		OutputDir:           c.String(outputFlag),
-		OutputTypes:         outputTypes,
-		ParseVendor:         c.Bool(parseVendorFlag),
-		ParseDependency:     c.Bool(parseDependencyFlag),
-		MarkdownFilesDir:    c.String(markdownFilesFlag),
-		ParseInternal:       c.Bool(parseInternalFlag),
-		GeneratedTime:       c.Bool(generatedTimeFlag),
-		CodeExampleFilesDir: c.String(codeExampleFilesFlag),
-		ParseDepth:          c.Int(parseDepthFlag),
-		InstanceName:        c.String(instanceNameFlag),
-		OverridesFile:       c.String(overridesFileFlag),
+		SearchDir:            c.String(searchDirFlag),
+		Excludes:             c.String(excludeFlag),
+		MainAPIFile:          c.String(generalInfoFlag),
+		PropNamingStrategy:   strategy,
+		OutputDir:            c.String(outputFlag),
+		OutputTypes:          outputTypes,
+		ParseVendor:          c.Bool(parseVendorFlag),
+		ParseDependency:      c.Bool(parseDependencyFlag),
+		MarkdownFilesDirs:    c.StringSlice(markdownFilesFlag),
+		ParseInternal:        c.Bool(parseInternalFlag),
+		GeneratedTime:        c.Bool(generatedTimeFlag),
+		CodeExampleFilesDirs: c.StringSlice(codeExampleFilesFlag),
+		ParseDepth:           c.Int(parseDepthFlag),
+		InstanceName:         c.String(instanceNameFlag),
+		OverridesFile:        c.String(overridesFileFlag),
 	})
 }
 

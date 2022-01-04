@@ -120,11 +120,11 @@ type Parser struct {
 	// structStack stores full names of the structures that were already parsed or are being parsed now
 	structStack []*TypeSpecDef
 
-	// markdownFileDir holds the path to the folder, where markdown files are stored
-	markdownFileDir string
+	// markdownFileDirs holds the paths to the folders, where markdown files are stored
+	markdownFileDirs []string
 
-	// codeExampleFilesDir holds path to the folder, where code example files are stored
-	codeExampleFilesDir string
+	// codeExampleFilesDirs holds paths to the folders, where code example files are stored
+	codeExampleFilesDirs []string
 
 	// collectionFormatInQuery set the default collectionFormat otherwise then 'csv' for array in query params
 	collectionFormatInQuery string
@@ -200,17 +200,17 @@ func New(options ...func(*Parser)) *Parser {
 	return parser
 }
 
-// SetMarkdownFileDirectory sets the directory to search for markdown files.
-func SetMarkdownFileDirectory(directoryPath string) func(*Parser) {
+// SetMarkdownFileDirectories sets the directories to search for markdown files.
+func SetMarkdownFileDirectories(directoryPaths ...string) func(*Parser) {
 	return func(p *Parser) {
-		p.markdownFileDir = directoryPath
+		p.markdownFileDirs = directoryPaths
 	}
 }
 
-// SetCodeExamplesDirectory sets the directory to search for code example files.
-func SetCodeExamplesDirectory(directoryPath string) func(*Parser) {
+// SetCodeExamplesDirectories sets the directories to search for code example files.
+func SetCodeExamplesDirectories(directoryPaths ...string) func(*Parser) {
 	return func(p *Parser) {
-		p.codeExampleFilesDir = directoryPath
+		p.codeExampleFilesDirs = directoryPaths
 	}
 }
 
@@ -403,7 +403,7 @@ func parseGeneralAPIInfo(parser *Parser, comments []string) error {
 			}
 			parser.swagger.Info.Description = value
 		case "@description.markdown":
-			commentInfo, err := getMarkdownForTag("api", parser.markdownFileDir)
+			commentInfo, err := getMarkdownForTag("api", parser.markdownFileDirs)
 			if err != nil {
 				return err
 			}
@@ -450,7 +450,7 @@ func parseGeneralAPIInfo(parser *Parser, comments []string) error {
 			replaceLastTag(parser.swagger.Tags, tag)
 		case "@tag.description.markdown":
 			tag := parser.swagger.Tags[len(parser.swagger.Tags)-1]
-			commentInfo, err := getMarkdownForTag(tag.TagProps.Name, parser.markdownFileDir)
+			commentInfo, err := getMarkdownForTag(tag.TagProps.Name, parser.markdownFileDirs)
 			if err != nil {
 				return err
 			}
@@ -665,30 +665,33 @@ func handleSecuritySchemaExtensions(providedExtensions map[string]interface{}) s
 	return extensions
 }
 
-func getMarkdownForTag(tagName string, dirPath string) ([]byte, error) {
-	filesInfos, err := ioutil.ReadDir(dirPath)
-	if err != nil {
-		return nil, err
-	}
+func getMarkdownForTag(tagName string, dirPaths []string) ([]byte, error) {
+	for _, dirPath := range dirPaths {
 
-	for _, fileInfo := range filesInfos {
-		if fileInfo.IsDir() {
-			continue
-		}
-		fileName := fileInfo.Name()
-
-		if !strings.Contains(fileName, ".md") {
-			continue
+		filesInfos, err := ioutil.ReadDir(dirPath)
+		if err != nil {
+			return nil, err
 		}
 
-		if strings.Contains(fileName, tagName) {
-			fullPath := filepath.Join(dirPath, fileName)
-			commentInfo, err := ioutil.ReadFile(fullPath)
-			if err != nil {
-				return nil, fmt.Errorf("Failed to read markdown file %s error: %s ", fullPath, err)
+		for _, fileInfo := range filesInfos {
+			if fileInfo.IsDir() {
+				continue
+			}
+			fileName := fileInfo.Name()
+
+			if !strings.Contains(fileName, ".md") {
+				continue
 			}
 
-			return commentInfo, nil
+			if strings.Contains(fileName, tagName) {
+				fullPath := filepath.Join(dirPath, fileName)
+				commentInfo, err := ioutil.ReadFile(fullPath)
+				if err != nil {
+					return nil, fmt.Errorf("Failed to read markdown file %s error: %s ", fullPath, err)
+				}
+
+				return commentInfo, nil
+			}
 		}
 	}
 
@@ -721,7 +724,7 @@ func (parser *Parser) ParseRouterAPIInfo(fileName string, astFile *ast.File) err
 		astDeclaration, ok := astDescription.(*ast.FuncDecl)
 		if ok && astDeclaration.Doc != nil && astDeclaration.Doc.List != nil {
 			// for per 'function' comment, create a new 'Operation' object
-			operation := NewOperation(parser, SetCodeExampleFilesDirectory(parser.codeExampleFilesDir))
+			operation := NewOperation(parser, SetCodeExampleFilesDirectories(parser.codeExampleFilesDirs...))
 			for _, comment := range astDeclaration.Doc.List {
 				err := operation.ParseComment(comment.Text, astFile)
 				if err != nil {

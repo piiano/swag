@@ -2002,7 +2002,7 @@ func TestParseDescriptionMarkdown(t *testing.T) {
 	t.Parallel()
 
 	operation := NewOperation(nil)
-	operation.parser.markdownFileDir = "example/markdown"
+	operation.parser.markdownFileDirs = []string{"example/markdown"}
 
 	comment := `@description.markdown admin.md`
 
@@ -2191,7 +2191,7 @@ func TestParseCodeSamples(t *testing.T) {
 	const comment = `@x-codeSamples file`
 	t.Run("Find sample by file", func(t *testing.T) {
 
-		operation := NewOperation(nil, SetCodeExampleFilesDirectory("testdata/code_examples"))
+		operation := NewOperation(nil, SetCodeExampleFilesDirectories("testdata/code_examples"))
 		operation.Summary = "example"
 
 		err := operation.ParseComment(comment, nil)
@@ -2202,7 +2202,7 @@ func TestParseCodeSamples(t *testing.T) {
 	})
 
 	t.Run("With broken file sample", func(t *testing.T) {
-		operation := NewOperation(nil, SetCodeExampleFilesDirectory("testdata/code_examples"))
+		operation := NewOperation(nil, SetCodeExampleFilesDirectories("testdata/code_examples"))
 		operation.Summary = "broken"
 
 		err := operation.ParseComment(comment, nil)
@@ -2210,7 +2210,7 @@ func TestParseCodeSamples(t *testing.T) {
 	})
 
 	t.Run("Example file not found", func(t *testing.T) {
-		operation := NewOperation(nil, SetCodeExampleFilesDirectory("testdata/code_examples"))
+		operation := NewOperation(nil, SetCodeExampleFilesDirectories("testdata/code_examples"))
 		operation.Summary = "badExample"
 
 		err := operation.ParseComment(comment, nil)
@@ -2219,7 +2219,7 @@ func TestParseCodeSamples(t *testing.T) {
 
 	t.Run("Without line reminder", func(t *testing.T) {
 		comment := `@x-codeSamples`
-		operation := NewOperation(nil, SetCodeExampleFilesDirectory("testdata/code_examples"))
+		operation := NewOperation(nil, SetCodeExampleFilesDirectories("testdata/code_examples"))
 		operation.Summary = "example"
 
 		err := operation.ParseComment(comment, nil)
@@ -2227,7 +2227,7 @@ func TestParseCodeSamples(t *testing.T) {
 	})
 
 	t.Run(" broken dir", func(t *testing.T) {
-		operation := NewOperation(nil, SetCodeExampleFilesDirectory("testdata/fake_examples"))
+		operation := NewOperation(nil, SetCodeExampleFilesDirectories("testdata/fake_examples"))
 		operation.Summary = "code"
 
 		err := operation.ParseComment(comment, nil)
