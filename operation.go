@@ -27,8 +27,8 @@ type RouteProperties struct {
 // Operation describes a single API operation on a path.
 // For more information: https://github.com/swaggo/swag#api-operation
 type Operation struct {
-	parser              *Parser
-	codeExampleFilesDir string
+	parser               *Parser
+	codeExampleFilesDirs []string
 	spec.Operation
 	RouterProperties []RouteProperties
 }
@@ -97,10 +97,10 @@ func NewOperation(parser *Parser, options ...func(*Operation)) *Operation {
 	return result
 }
 
-// SetCodeExampleFilesDirectory sets the directory to search for codeExamples.
-func SetCodeExampleFilesDirectory(directoryPath string) func(*Operation) {
+// SetCodeExampleFilesDirectories sets the directories to search for codeExamples.
+func SetCodeExampleFilesDirectories(directoryPaths ...string) func(*Operation) {
 	return func(o *Operation) {
-		o.codeExampleFilesDir = directoryPath
+		o.codeExampleFilesDirs = directoryPaths
 	}
 }
 
@@ -118,7 +118,7 @@ func (operation *Operation) ParseComment(comment string, astFile *ast.File) erro
 	case descriptionAttr:
 		operation.ParseDescriptionComment(lineRemainder)
 	case descriptionMarkdownAttr:
-		commentInfo, err := getMarkdownForTag(lineRemainder, operation.parser.markdownFileDir)
+		commentInfo, err := getMarkdownForTag(lineRemainder, operation.parser.markdownFileDirs)
 		if err != nil {
 			return err
 		}
@@ -158,7 +158,7 @@ func (operation *Operation) ParseComment(comment string, astFile *ast.File) erro
 // ParseCodeSample godoc.
 func (operation *Operation) ParseCodeSample(attribute, _, lineRemainder string) error {
 	if lineRemainder == "file" {
-		data, err := getCodeExampleForSummary(operation.Summary, operation.codeExampleFilesDir)
+		data, err := getCodeExampleForSummary(operation.Summary, operation.codeExampleFilesDirs)
 		if err != nil {
 			return err
 		}
@@ -1192,32 +1192,33 @@ func createParameter(paramType, description, paramName, schemaType string, requi
 	return result
 }
 
-func getCodeExampleForSummary(summaryName string, dirPath string) ([]byte, error) {
-	filesInfos, err := ioutil.ReadDir(dirPath)
-	if err != nil {
-		return nil, err
-	}
+func getCodeExampleForSummary(summaryName string, dirPaths []string) ([]byte, error) {
+	for _, dirPath := range dirPaths {
 
-	for _, fileInfo := range filesInfos {
-		if fileInfo.IsDir() {
-			continue
+		filesInfos, err := ioutil.ReadDir(dirPath)
+		if err != nil {
+			return nil, err
 		}
 
-		fileName := fileInfo.Name()
+		for _, fileInfo := range filesInfos {
+			if fileInfo.IsDir() {
+				continue
+			}
+			fileName := fileInfo.Name()
 
-		if !strings.Contains(fileName, ".json") {
-			continue
-		}
-
-		if strings.Contains(fileName, summaryName) {
-			fullPath := filepath.Join(dirPath, fileName)
-
-			commentInfo, err := ioutil.ReadFile(fullPath)
-			if err != nil {
-				return nil, fmt.Errorf("Failed to read code example file %s error: %s ", fullPath, err)
+			if !strings.Contains(fileName, ".json") {
+				continue
 			}
 
-			return commentInfo, nil
+			if strings.Contains(fileName, summaryName) {
+				fullPath := filepath.Join(dirPath, fileName)
+				commentInfo, err := ioutil.ReadFile(fullPath)
+				if err != nil {
+					return nil, fmt.Errorf("Failed to read code example file %s error: %s ", fullPath, err)
+				}
+
+				return commentInfo, nil
+			}
 		}
 	}
 

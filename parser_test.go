@@ -27,17 +27,17 @@ func TestNew(t *testing.T) {
 	t.Run("SetMarkdownFileDirectory", func(t *testing.T) {
 		t.Parallel()
 
-		expected := "docs/markdown"
-		p := New(SetMarkdownFileDirectory(expected))
-		assert.Equal(t, expected, p.markdownFileDir)
+		expected := []string{"docs/markdown"}
+		p := New(SetMarkdownFileDirectories(expected...))
+		assert.Equal(t, expected, p.markdownFileDirs)
 	})
 
 	t.Run("SetCodeExamplesDirectory", func(t *testing.T) {
 		t.Parallel()
 
-		expected := "docs/examples"
-		p := New(SetCodeExamplesDirectory(expected))
-		assert.Equal(t, expected, p.codeExampleFilesDir)
+		expected := []string{"docs/examples"}
+		p := New(SetCodeExamplesDirectories(expected...))
+		assert.Equal(t, expected, p.codeExampleFilesDirs)
 	})
 
 	t.Run("SetStrict", func(t *testing.T) {
@@ -401,7 +401,7 @@ func TestParser_ParseGeneralApiInfoWithOpsInSameFile(t *testing.T) {
 func TestParser_ParseGeneralAPIInfoMarkdown(t *testing.T) {
 	t.Parallel()
 
-	p := New(SetMarkdownFileDirectory("testdata"))
+	p := New(SetMarkdownFileDirectories("testdata"))
 	mainAPIFile := "testdata/markdown.go"
 	err := p.ParseGeneralAPIInfo(mainAPIFile)
 	assert.NoError(t, err)
@@ -2948,7 +2948,7 @@ func TestApiParseTag(t *testing.T) {
 	t.Parallel()
 
 	searchDir := "testdata/tags"
-	p := New(SetMarkdownFileDirectory(searchDir))
+	p := New(SetMarkdownFileDirectories(searchDir))
 	p.PropNamingStrategy = PascalCase
 	err := p.ParseAPI(searchDir, mainAPIFile, defaultParseDepth)
 	assert.NoError(t, err)
@@ -2978,7 +2978,7 @@ func TestApiParseTag_NonExistendTag(t *testing.T) {
 	t.Parallel()
 
 	searchDir := "testdata/tags_nonexistend_tag"
-	p := New(SetMarkdownFileDirectory(searchDir))
+	p := New(SetMarkdownFileDirectories(searchDir))
 	p.PropNamingStrategy = PascalCase
 	err := p.ParseAPI(searchDir, mainAPIFile, defaultParseDepth)
 	assert.Error(t, err)
@@ -2988,7 +2988,7 @@ func TestParseTagMarkdownDescription(t *testing.T) {
 	t.Parallel()
 
 	searchDir := "testdata/tags"
-	p := New(SetMarkdownFileDirectory(searchDir))
+	p := New(SetMarkdownFileDirectories(searchDir))
 	p.PropNamingStrategy = PascalCase
 	err := p.ParseAPI(searchDir, mainAPIFile, defaultParseDepth)
 	if err != nil {
@@ -3009,7 +3009,7 @@ func TestParseApiMarkdownDescription(t *testing.T) {
 	t.Parallel()
 
 	searchDir := "testdata/tags"
-	p := New(SetMarkdownFileDirectory(searchDir))
+	p := New(SetMarkdownFileDirectories(searchDir))
 	p.PropNamingStrategy = PascalCase
 	err := p.ParseAPI(searchDir, mainAPIFile, defaultParseDepth)
 	if err != nil {

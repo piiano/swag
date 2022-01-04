@@ -84,11 +84,11 @@ type Config struct {
 	// PropNamingStrategy represents property naming strategy like snake case,camel case,pascal case
 	PropNamingStrategy string
 
-	// MarkdownFilesDir used to find markdown files, which can be used for tag descriptions
-	MarkdownFilesDir string
+	// MarkdownFilesDirs used to find markdown files, which can be used for tag descriptions
+	MarkdownFilesDirs []string
 
-	// CodeExampleFilesDir used to find code example files, which can be used for x-codeSamples
-	CodeExampleFilesDir string
+	// CodeExampleFilesDirs used to find code example files, which can be used for x-codeSamples
+	CodeExampleFilesDirs []string
 
 	// InstanceName is used to get distinct names for different swagger documents in the
 	// same project. The default value is "swagger".
@@ -159,10 +159,10 @@ func (g *Gen) Build(config *Config) error {
 
 	g.debug.Printf("Generate swagger docs....")
 
-	p := swag.New(swag.SetMarkdownFileDirectory(config.MarkdownFilesDir),
+	p := swag.New(swag.SetMarkdownFileDirectory(config.MarkdownFilesDir...),
 		swag.SetDebugger(config.Debugger),
 		swag.SetExcludedDirsAndFiles(config.Excludes),
-		swag.SetCodeExamplesDirectory(config.CodeExampleFilesDir),
+		swag.SetCodeExamplesDirectories(config.CodeExampleFilesDirs...),
 		swag.SetStrict(config.Strict),
 		swag.SetOverrides(overrides),
 		swag.ParseUsingGoList(config.ParseGoList),

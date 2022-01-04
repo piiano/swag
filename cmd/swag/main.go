@@ -7,11 +7,10 @@ import (
 	"os"
 	"strings"
 
-	"github.com/urfave/cli/v2"
-
 	"github.com/swaggo/swag"
 	"github.com/swaggo/swag/format"
 	"github.com/swaggo/swag/gen"
+	"github.com/urfave/cli/v2"
 )
 
 const (
@@ -84,17 +83,17 @@ var initFlags = []cli.Flag{
 		Aliases: []string{"pd"},
 		Usage:   "Parse go files inside dependency folder, disabled by default",
 	},
-	&cli.StringFlag{
+	&cli.StringSliceFlag{
 		Name:    markdownFilesFlag,
 		Aliases: []string{"md"},
-		Value:   "",
-		Usage:   "Parse folder containing markdown files to use as description, disabled by default",
+		Value:   nil,
+		Usage:   "Parse folders containing markdown files to use as description, disabled by default",
 	},
-	&cli.StringFlag{
+	&cli.StringSliceFlag{
 		Name:    codeExampleFilesFlag,
 		Aliases: []string{"cef"},
-		Value:   "",
-		Usage:   "Parse folder containing code example files to use for the x-codeSamples extension, disabled by default",
+		Value:   nil,
+		Usage:   "Parse folders containing code example files to use for the x-codeSamples extension, disabled by default",
 	},
 	&cli.BoolFlag{
 		Name:  parseInternalFlag,
@@ -149,24 +148,24 @@ func initAction(ctx *cli.Context) error {
 	}
 
 	return gen.New().Build(&gen.Config{
-		SearchDir:           ctx.String(searchDirFlag),
-		Excludes:            ctx.String(excludeFlag),
-		MainAPIFile:         ctx.String(generalInfoFlag),
-		PropNamingStrategy:  strategy,
-		OutputDir:           ctx.String(outputFlag),
-		OutputTypes:         outputTypes,
-		ParseVendor:         ctx.Bool(parseVendorFlag),
-		ParseDependency:     ctx.Bool(parseDependencyFlag),
-		MarkdownFilesDir:    ctx.String(markdownFilesFlag),
-		ParseInternal:       ctx.Bool(parseInternalFlag),
-		GeneratedTime:       ctx.Bool(generatedTimeFlag),
-		RequiredByDefault:   ctx.Bool(requiredByDefaultFlag),
-		CodeExampleFilesDir: ctx.String(codeExampleFilesFlag),
-		ParseDepth:          ctx.Int(parseDepthFlag),
-		InstanceName:        ctx.String(instanceNameFlag),
-		OverridesFile:       ctx.String(overridesFileFlag),
-		ParseGoList:         ctx.Bool(parseGoListFlag),
-		Debugger:            logger,
+		SearchDir:            ctx.String(searchDirFlag),
+		Excludes:             ctx.String(excludeFlag),
+		MainAPIFile:          ctx.String(generalInfoFlag),
+		PropNamingStrategy:   strategy,
+		OutputDir:            ctx.String(outputFlag),
+		OutputTypes:          outputTypes,
+		ParseVendor:          ctx.Bool(parseVendorFlag),
+		ParseDependency:      ctx.Bool(parseDependencyFlag),
+		MarkdownFilesDirs:    ctx.StringSlice(markdownFilesFlag),
+		ParseInternal:        ctx.Bool(parseInternalFlag),
+		GeneratedTime:        ctx.Bool(generatedTimeFlag),
+		RequiredByDefault:    ctx.Bool(requiredByDefaultFlag),
+		CodeExampleFilesDirs: ctx.StringSlice(codeExampleFilesFlag),
+		ParseDepth:           ctx.Int(parseDepthFlag),
+		InstanceName:         ctx.String(instanceNameFlag),
+		OverridesFile:        ctx.String(overridesFileFlag),
+		ParseGoList:          ctx.Bool(parseGoListFlag),
+		Debugger:             logger,
 	})
 }
 
