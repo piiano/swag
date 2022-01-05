@@ -17,7 +17,7 @@ import (
 
 	"github.com/ghodss/yaml"
 	"github.com/go-openapi/spec"
-	"github.com/swaggo/swag"
+	"github.com/piiano/swag"
 )
 
 var open = os.Open
@@ -411,7 +411,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/swaggo/swag"
+	"github.com/piiano/swag"
 )
 
 var doc = ` + "`{{ printDoc .Doc}}`" + `

@@ -1,11 +1,11 @@
-module github.com/swaggo/swag/example/markdown
+module github.com/piiano/swag/example/markdown
 
 go 1.17
 
 require (
 	github.com/gorilla/mux v1.7.3
 	github.com/swaggo/http-swagger v1.1.2
-	github.com/swaggo/swag v1.7.0
+	github.com/piiano/swag v1.7.0
 )
 
 require (
