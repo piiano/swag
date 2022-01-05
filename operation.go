@@ -25,7 +25,7 @@ type RouteProperties struct {
 }
 
 // Operation describes a single API operation on a path.
-// For more information: https://github.com/swaggo/swag#api-operation
+// For more information: https://github.com/piiano/swag#api-operation
 type Operation struct {
 	parser               *Parser
 	codeExampleFilesDirs []string
@@ -87,7 +87,7 @@ func NewOperation(parser *Parser, options ...func(*Operation)) *Operation {
 				Extensions: spec.Extensions{},
 			},
 		},
-		codeExampleFilesDir: "",
+		codeExampleFilesDirs: nil,
 	}
 
 	for _, option := range options {
