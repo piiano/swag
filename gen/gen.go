@@ -15,6 +15,8 @@ import (
 	"text/template"
 	"time"
 
+	"github.com/getkin/kin-openapi/openapi2"
+	"github.com/getkin/kin-openapi/openapi2conv"
 	"github.com/ghodss/yaml"
 	"github.com/go-openapi/spec"
 
@@ -54,10 +56,11 @@ func New() *Gen {
 	}
 
 	gen.outputTypeMap = map[string]genTypeWriter{
-		"go":   gen.writeDocSwagger,
-		"json": gen.writeJSONSwagger,
-		"yaml": gen.writeYAMLSwagger,
-		"yml":  gen.writeYAMLSwagger,
+		"go":    gen.writeDocSwagger,
+		"json":  gen.writeJSONSwagger,
+		"json3": gen.writeJSONSwagger3,
+		"yaml":  gen.writeYAMLSwagger,
+		"yml":   gen.writeYAMLSwagger,
 	}
 
 	return &gen
@@ -253,6 +256,42 @@ func (g *Gen) writeJSONSwagger(config *Config, swagger *spec.Swagger) error {
 
 	g.debug.Printf("create swagger.json at  %+v", jsonFileName)
 
+	return nil
+}
+
+func (g *Gen) writeJSONSwagger3(config *Config, swagger *spec.Swagger) error {
+	var filename = "swagger3.json"
+	if config.InstanceName != swag.Name {
+		filename = config.InstanceName + "_" + filename
+	}
+	jsonFileName := path.Join(config.OutputDir, filename)
+
+	b, err := g.jsonIndent(swagger)
+	if err != nil {
+		return err
+	}
+
+	var docV2 openapi2.T
+	if err := json.Unmarshal(b, &docV2); err != nil {
+		return err
+	}
+
+	docV3, err := openapi2conv.ToV3(&docV2)
+	if err != nil {
+		return err
+	}
+
+	b3, err := json.Marshal(docV3)
+	if err != nil {
+		return err
+	}
+
+	err = g.writeFile(b3, jsonFileName)
+	if err != nil {
+		return err
+	}
+
+	log.Printf("create swagger3.json at  %+v", jsonFileName)
 	return nil
 }
 
