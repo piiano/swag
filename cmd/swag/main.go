@@ -33,6 +33,7 @@ const (
 	overridesFileFlag     = "overridesFile"
 	parseGoListFlag       = "parseGoList"
 	quietFlag             = "quiet"
+	goCliFlag             = "goCli"
 )
 
 var initFlags = []cli.Flag{
@@ -128,6 +129,11 @@ var initFlags = []cli.Flag{
 		Value: true,
 		Usage: "Parse dependency via 'go list'",
 	},
+	&cli.StringFlag{
+		Name:  goCliFlag,
+		Value: "go",
+		Usage: "The `go` binary to use (e.g. `gotip`, `go1.18beta1`, etc).",
+	},
 }
 
 func initAction(ctx *cli.Context) error {
@@ -166,6 +172,7 @@ func initAction(ctx *cli.Context) error {
 		InstanceName:         ctx.String(instanceNameFlag),
 		OverridesFile:        ctx.String(overridesFileFlag),
 		ParseGoList:          ctx.Bool(parseGoListFlag),
+		GoCLI:                ctx.String(goCliFlag),
 		Debugger:             logger,
 	})
 }

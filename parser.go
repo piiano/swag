@@ -159,6 +159,9 @@ type Parser struct {
 
 	// parseGoList whether swag use go list to parse dependency
 	parseGoList bool
+
+	// Go CLI to use.
+	GoCLI string
 }
 
 // FieldParserFactory create FieldParser.
@@ -290,6 +293,13 @@ func ParseUsingGoList(enabled bool) func(parser *Parser) {
 	}
 }
 
+// SetGoCLI allows the use of user-defined go CLI, such as ``gotip``.
+func SetGoCLI(goCLI string) func(parser *Parser) {
+	return func(p *Parser) {
+		p.GoCLI = goCLI
+	}
+}
+
 // ParseAPI parses general api info for given searchDir and mainAPIFile.
 func (parser *Parser) ParseAPI(searchDir string, mainAPIFile string, parseDepth int) error {
 	return parser.ParseAPIMultiSearchDir([]string{searchDir}, mainAPIFile, parseDepth)
@@ -300,7 +310,7 @@ func (parser *Parser) ParseAPIMultiSearchDir(searchDirs []string, mainAPIFile st
 	for _, searchDir := range searchDirs {
 		parser.debug.Printf("Generate general API Info, search dir:%s", searchDir)
 
-		packageDir, err := getPkgName(searchDir)
+		packageDir, err := getPkgName(parser.GoCLI, searchDir)
 		if err != nil {
 			parser.debug.Printf("warning: failed to get package name in dir: %s, error: %s", searchDir, err.Error())
 		}
@@ -336,7 +346,7 @@ func (parser *Parser) ParseAPIMultiSearchDir(searchDirs []string, mainAPIFile st
 			t.ResolveInternal = true
 			t.MaxDepth = parseDepth
 
-			pkgName, err := getPkgName(filepath.Dir(absMainAPIFilePath))
+			pkgName, err := getPkgName(parser.GoCLI, filepath.Dir(absMainAPIFilePath))
 			if err != nil {
 				return err
 			}
@@ -374,8 +384,33 @@ func (parser *Parser) ParseAPIMultiSearchDir(searchDirs []string, mainAPIFile st
 	return parser.checkOperationIDUniqueness()
 }
 
-func getPkgName(searchDir string) (string, error) {
-	cmd := exec.Command("go", "list", "-f={{.ImportPath}}")
+func (*Parser) ResolveDepsInDir(t *depth.Tree, dir string, pkgName string) error {
+	pwd, err := os.Getwd()
+	if err != nil {
+		return fmt.Errorf("failed getting pwd: %w", err)
+	}
+	if err := os.Chdir(dir); err != nil {
+		return fmt.Errorf("failed changing dir [%s]: %w", dir, err)
+	}
+
+	err = t.Resolve(pkgName)
+	if err != nil {
+		return fmt.Errorf("pkg %s cannot find all dependencies, %s", pkgName, err)
+	}
+
+	if err := os.Chdir(pwd); err != nil {
+		return fmt.Errorf("failed changing back to pwd [%s]: %w", pwd, err)
+	}
+	return nil
+}
+
+func getPkgName(goCLI, searchDir string) (string, error) {
+	cli := "go"
+	if goCLI != "" {
+		cli = goCLI
+	}
+
+	cmd := exec.Command(cli, "list", "-f={{.ImportPath}}")
 	cmd.Dir = searchDir
 
 	var stdout, stderr strings.Builder

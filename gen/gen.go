@@ -124,6 +124,9 @@ type Config struct {
 
 	// ParseGoList whether swag use go list to parse dependency
 	ParseGoList bool
+
+	// Go CLI binary to use (e.g. `gotip`).
+	GoCLI string
 }
 
 // Build builds swagger json file  for given searchDir and mainAPIFile. Returns json.
@@ -170,6 +173,7 @@ func (g *Gen) Build(config *Config) error {
 		swag.SetStrict(config.Strict),
 		swag.SetOverrides(overrides),
 		swag.ParseUsingGoList(config.ParseGoList),
+		swag.SetGoCLI(config.GoCLI),
 	)
 
 	p.PropNamingStrategy = config.PropNamingStrategy
