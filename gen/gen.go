@@ -111,6 +111,9 @@ type Config struct {
 
 	// OverridesFile defines global type overrides.
 	OverridesFile string
+
+	// Go CLI binary to use (e.g. `gotip`).
+	GoCLI string
 }
 
 // Build builds swagger json file  for given searchDir and mainAPIFile. Returns json
@@ -150,6 +153,7 @@ func (g *Gen) Build(config *Config) error {
 		swag.SetCodeExamplesDirectories(config.CodeExampleFilesDirs...),
 		swag.SetStrict(config.Strict),
 		swag.SetOverrides(overrides),
+		swag.SetGoCLI(config.GoCLI),
 	)
 	p.PropNamingStrategy = config.PropNamingStrategy
 	p.ParseVendor = config.ParseVendor

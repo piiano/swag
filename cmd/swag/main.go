@@ -29,6 +29,7 @@ const (
 	parseDepthFlag       = "parseDepth"
 	instanceNameFlag     = "instanceName"
 	overridesFileFlag    = "overridesFile"
+	goCliFlag            = "goCli"
 )
 
 var initFlags = []cli.Flag{
@@ -110,6 +111,11 @@ var initFlags = []cli.Flag{
 		Value: gen.DefaultOverridesFile,
 		Usage: "File to read global type overrides from.",
 	},
+	&cli.StringFlag{
+		Name:  goCliFlag,
+		Value: "go",
+		Usage: "The `go` binary to use (e.g. `gotip`, `go1.18beta1`, etc).",
+	},
 }
 
 func initAction(c *cli.Context) error {
@@ -142,6 +148,7 @@ func initAction(c *cli.Context) error {
 		ParseDepth:           c.Int(parseDepthFlag),
 		InstanceName:         c.String(instanceNameFlag),
 		OverridesFile:        c.String(overridesFileFlag),
+		GoCLI:                c.String(goCliFlag),
 	})
 }
 
