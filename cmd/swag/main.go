@@ -6,10 +6,11 @@ import (
 	"os"
 	"strings"
 
+	"github.com/urfave/cli/v2"
+
 	"github.com/piiano/swag"
 	"github.com/piiano/swag/format"
 	"github.com/piiano/swag/gen"
-	"github.com/urfave/cli/v2"
 )
 
 const (
@@ -62,8 +63,8 @@ var initFlags = []cli.Flag{
 	&cli.StringFlag{
 		Name:    outputTypesFlag,
 		Aliases: []string{"ot"},
-		Value:   "go,json,yaml",
-		Usage:   "Output types of generated files (docs.go, swagger.json, swagger.yaml) like go,json,yaml",
+		Value:   "go,json,json3,yaml",
+		Usage:   "Output types of generated files (docs.go, swagger.json, swagger3.json, swagger.yaml) like go,json,json3,yaml",
 	},
 	&cli.BoolFlag{
 		Name:  parseVendorFlag,
