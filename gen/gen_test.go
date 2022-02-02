@@ -14,9 +14,9 @@ import (
 	"testing"
 
 	"github.com/go-openapi/spec"
+	"github.com/piiano/swag"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/swaggo/swag"
 )
 
 const searchDir = "../testdata/simple"
@@ -175,11 +175,11 @@ func TestGen_BuildLowerCamelcase(t *testing.T) {
 
 func TestGen_BuildDescriptionWithQuotes(t *testing.T) {
 	config := &Config{
-		SearchDir:        "../testdata/quotes",
-		MainAPIFile:      "./main.go",
-		OutputDir:        "../testdata/quotes/docs",
-		OutputTypes:      outputTypes,
-		MarkdownFilesDir: "../testdata/quotes",
+		SearchDir:         "../testdata/quotes",
+		MainAPIFile:       "./main.go",
+		OutputDir:         "../testdata/quotes/docs",
+		OutputTypes:       outputTypes,
+		MarkdownFilesDirs: []string{"../testdata/quotes"},
 	}
 
 	require.NoError(t, New().Build(config))
@@ -194,7 +194,7 @@ func TestGen_BuildDescriptionWithQuotes(t *testing.T) {
 			require.NoError(t, err)
 		}
 	}
-	cmd := exec.Command("go", "build", "-buildmode=plugin", "github.com/swaggo/swag/testdata/quotes")
+	cmd := exec.Command("go", "build", "-buildmode=plugin", "github.com/piiano/swag/testdata/quotes")
 	cmd.Dir = config.SearchDir
 	output, err := cmd.CombinedOutput()
 	if err != nil {

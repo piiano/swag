@@ -4,14 +4,14 @@
 
 <img align="right" width="180px" src="https://raw.githubusercontent.com/swaggo/swag/master/assets/swaggo.png">
 
-[![Build Status](https://github.com/swaggo/swag/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/features/actions)
+[![Build Status](https://github.com/piiano/swag/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/features/actions)
 [![Coverage Status](https://img.shields.io/codecov/c/github/swaggo/swag/master.svg)](https://codecov.io/gh/swaggo/swag)
-[![Go Report Card](https://goreportcard.com/badge/github.com/swaggo/swag)](https://goreportcard.com/report/github.com/swaggo/swag)
+[![Go Report Card](https://goreportcard.com/badge/github.com/piiano/swag)](https://goreportcard.com/report/github.com/piiano/swag)
 [![codebeat badge](https://codebeat.co/badges/71e2f5e5-9e6b-405d-baf9-7cc8b5037330)](https://codebeat.co/projects/github-com-swaggo-swag-master)
-[![Go Doc](https://godoc.org/github.com/swaggo/swagg?status.svg)](https://godoc.org/github.com/swaggo/swag)
+[![Go Doc](https://godoc.org/github.com/piiano/swagg?status.svg)](https://godoc.org/github.com/piiano/swag)
 [![Backers on Open Collective](https://opencollective.com/swag/backers/badge.svg)](#backers) 
 [![Sponsors on Open Collective](https://opencollective.com/swag/sponsors/badge.svg)](#sponsors) [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fswaggo%2Fswag.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fswaggo%2Fswag?ref=badge_shield)
-[![Release](https://img.shields.io/github/release/swaggo/swag.svg?style=flat-square)](https://github.com/swaggo/swag/releases)
+[![Release](https://img.shields.io/github/release/swaggo/swag.svg?style=flat-square)](https://github.com/piiano/swag/releases)
 
 
 Swag converts Go annotations to Swagger Documentation 2.0. We've created a variety of plugins for popular [Go web frameworks](#supported-web-frameworks). This allows you to quickly integrate with an existing Go project (using Swagger UI).
@@ -50,14 +50,14 @@ Swag converts Go annotations to Swagger Documentation 2.0. We've created a varie
 
 2. Download swag by using:
 ```sh
-$ go get -u github.com/swaggo/swag/cmd/swag
+$ go get -u github.com/piiano/swag/cmd/swag
 
 # 1.16 or newer
-$ go install github.com/swaggo/swag/cmd/swag@latest
+$ go install github.com/piiano/swag/cmd/swag@latest
 ```
 To build from source you need [Go](https://golang.org/dl/) (1.15 or newer).
 
-Or download a pre-compiled binary from the [release page](https://github.com/swaggo/swag/releases).
+Or download a pre-compiled binary from the [release page](https://github.com/piiano/swag/releases).
 
 3. Run `swag init` in the project's root folder which contains the `main.go` file. This will parse your comments and generate the required files (`docs` folder and `docs/docs.go`).
 ```sh
@@ -132,7 +132,7 @@ OPTIONS:
 
 ## How to use it with Gin
 
-Find the example source code [here](https://github.com/swaggo/swag/tree/master/example/celler).
+Find the example source code [here](https://github.com/piiano/swag/tree/master/example/celler).
 
 1. After using `swag init` to generate Swagger 2.0 docs, import the following packages:
 ```go
@@ -232,8 +232,8 @@ import (
     "strconv"
 
     "github.com/gin-gonic/gin"
-    "github.com/swaggo/swag/example/celler/httputil"
-    "github.com/swaggo/swag/example/celler/model"
+    "github.com/piiano/swag/example/celler/httputil"
+    "github.com/piiano/swag/example/celler/model"
 )
 
 // ShowAccount godoc
@@ -298,7 +298,7 @@ $ swag init
 ## The swag formatter
 
 The Swag Comments can be automatically formatted, just like 'go fmt'.  
-Find the result of formatting [here](https://github.com/swaggo/swag/tree/master/example/celler).
+Find the result of formatting [here](https://github.com/piiano/swag/tree/master/example/celler).
 
 Usage: 
 ```shell
@@ -335,69 +335,69 @@ swag fmt -d ./ --exclude ./internal
 ## General API Info
 
 **Example**
-[celler/main.go](https://github.com/swaggo/swag/blob/master/example/celler/main.go)
+[celler/main.go](https://github.com/piiano/swag/blob/master/example/celler/main.go)
 
-| annotation  | description                                | example                         |
-|-------------|--------------------------------------------|---------------------------------|
-| title       | **Required.** The title of the application.| // @title Swagger Example API   |
-| version     | **Required.** Provides the version of the application API.| // @version 1.0  |
-| description | A short description of the application.    |// @description This is a sample server celler server.         																 |
-| tag.name    | Name of a tag.| // @tag.name This is the name of the tag                     |
-| tag.description   | Description of the tag  | // @tag.description Cool Description         |
-| tag.docs.url      | Url of the external Documentation of the tag | // @tag.docs.url https://example.com|
-| tag.docs.description  | Description of the external Documentation of the tag| // @tag.docs.description Best example documentation |
-| termsOfService | The Terms of Service for the API.| // @termsOfService http://swagger.io/terms/                     |
-| contact.name | The contact information for the exposed API.| // @contact.name API Support  |
-| contact.url  | The URL pointing to the contact information. MUST be in the format of a URL.  | // @contact.url http://www.swagger.io/support|
-| contact.email| The email address of the contact person/organization. MUST be in the format of an email address.| // @contact.email support@swagger.io                                   |
-| license.name | **Required.** The license name used for the API.|// @license.name Apache 2.0|
-| license.url  | A URL to the license used for the API. MUST be in the format of a URL.                       | // @license.url http://www.apache.org/licenses/LICENSE-2.0.html |
-| host        | The host (name or ip) serving the API.     | // @host localhost:8080         |
-| BasePath    | The base path on which the API is served. | // @BasePath /api/v1             |
-| accept      | A list of MIME types the APIs can consume. Note that Accept only affects operations with a request body, such as POST, PUT and PATCH.  Value MUST be as described under [Mime Types](#mime-types).                     | // @accept json |
-| produce     | A list of MIME types the APIs can produce. Value MUST be as described under [Mime Types](#mime-types).                     | // @produce json |
-| query.collection.format | The default collection(array) param format in query,enums:csv,multi,pipes,tsv,ssv. If not set, csv is the default.| // @query.collection.format multi
-| schemes     | The transfer protocol for the operation that separated by spaces. | // @schemes http https |
-| x-name      | The extension key, must be start by x- and take only json value | // @x-example-key {"key": "value"} |
+| annotation              | description                                                                                                                                                                                        | example                                                         |
+| ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| title                   | **Required.** The title of the application.                                                                                                                                                        | // @title Swagger Example API                                   |
+| version                 | **Required.** Provides the version of the application API.                                                                                                                                         | // @version 1.0                                                 |
+| description             | A short description of the application.                                                                                                                                                            | // @description This is a sample server celler server.          |
+| tag.name                | Name of a tag.                                                                                                                                                                                     | // @tag.name This is the name of the tag                        |
+| tag.description         | Description of the tag                                                                                                                                                                             | // @tag.description Cool Description                            |
+| tag.docs.url            | Url of the external Documentation of the tag                                                                                                                                                       | // @tag.docs.url https://example.com                            |
+| tag.docs.description    | Description of the external Documentation of the tag                                                                                                                                               | // @tag.docs.description Best example documentation             |
+| termsOfService          | The Terms of Service for the API.                                                                                                                                                                  | // @termsOfService http://swagger.io/terms/                     |
+| contact.name            | The contact information for the exposed API.                                                                                                                                                       | // @contact.name API Support                                    |
+| contact.url             | The URL pointing to the contact information. MUST be in the format of a URL.                                                                                                                       | // @contact.url http://www.swagger.io/support                   |
+| contact.email           | The email address of the contact person/organization. MUST be in the format of an email address.                                                                                                   | // @contact.email support@swagger.io                            |
+| license.name            | **Required.** The license name used for the API.                                                                                                                                                   | // @license.name Apache 2.0                                     |
+| license.url             | A URL to the license used for the API. MUST be in the format of a URL.                                                                                                                             | // @license.url http://www.apache.org/licenses/LICENSE-2.0.html |
+| host                    | The host (name or ip) serving the API.                                                                                                                                                             | // @host localhost:8080                                         |
+| BasePath                | The base path on which the API is served.                                                                                                                                                          | // @BasePath /api/v1                                            |
+| accept                  | A list of MIME types the APIs can consume. Note that Accept only affects operations with a request body, such as POST, PUT and PATCH.  Value MUST be as described under [Mime Types](#mime-types). | // @accept json                                                 |
+| produce                 | A list of MIME types the APIs can produce. Value MUST be as described under [Mime Types](#mime-types).                                                                                             | // @produce json                                                |
+| query.collection.format | The default collection(array) param format in query,enums:csv,multi,pipes,tsv,ssv. If not set, csv is the default.                                                                                 | // @query.collection.format multi                               |
+| schemes                 | The transfer protocol for the operation that separated by spaces.                                                                                                                                  | // @schemes http https                                          |
+| x-name                  | The extension key, must be start by x- and take only json value                                                                                                                                    | // @x-example-key {"key": "value"}                              |
 
 ### Using markdown descriptions
 When a short string in your documentation is insufficient, or you need images, code examples and things like that you may want to use markdown descriptions. In order to use markdown descriptions use the following annotations.
 
 
-| annotation  | description                                | example                         |
-|-------------|--------------------------------------------|---------------------------------|
-| title       | **Required.** The title of the application.| // @title Swagger Example API   |
-| version     | **Required.** Provides the version of the application API.| // @version 1.0  |
-| description.markdown  | A short description of the application. Parsed from the api.md file. This is an alternative to @description    |// @description.markdown No value needed, this parses the description from api.md         																 |
-| tag.name    | Name of a tag.| // @tag.name This is the name of the tag                     |
-| tag.description.markdown   | Description of the tag this is an alternative to tag.description. The description will be read from a file named like tagname.md  | // @tag.description.markdown         |
+| annotation               | description                                                                                                                      | example                                                                           |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| title                    | **Required.** The title of the application.                                                                                      | // @title Swagger Example API                                                     |
+| version                  | **Required.** Provides the version of the application API.                                                                       | // @version 1.0                                                                   |
+| description.markdown     | A short description of the application. Parsed from the api.md file. This is an alternative to @description                      | // @description.markdown No value needed, this parses the description from api.md |
+| tag.name                 | Name of a tag.                                                                                                                   | // @tag.name This is the name of the tag                                          |
+| tag.description.markdown | Description of the tag this is an alternative to tag.description. The description will be read from a file named like tagname.md | // @tag.description.markdown                                                      |
 
 
 ## API Operation
 
 **Example**
-[celler/controller](https://github.com/swaggo/swag/tree/master/example/celler/controller)
+[celler/controller](https://github.com/piiano/swag/tree/master/example/celler/controller)
 
 
-| annotation  | description                                                                                                                |
-|-------------|----------------------------------------------------------------------------------------------------------------------------|
-| description | A verbose explanation of the operation behavior.                                                                           |
-| description.markdown     |  A short description of the application. The description will be read from a file named like endpointname.md| // @description.file endpoint.description.markdown  |
-| id          | A unique string used to identify the operation. Must be unique among all API operations.                                   |
-| tags        | A list of tags to each API operation that separated by commas.                                                             |
-| summary     | A short summary of what the operation does.                                                                                |
-| accept      | A list of MIME types the APIs can consume. Note that Accept only affects operations with a request body, such as POST, PUT and PATCH.  Value MUST be as described under [Mime Types](#mime-types).                     |
-| produce     | A list of MIME types the APIs can produce. Value MUST be as described under [Mime Types](#mime-types).                     |
-| param       | Parameters that separated by spaces. `param name`,`param type`,`data type`,`is mandatory?`,`comment` `attribute(optional)` |
-| security    | [Security](#security) to each API operation.                                                                               |
-| success     | Success response that separated by spaces. `return code or default`,`{param type}`,`data type`,`comment`                   |
-| failure     | Failure response that separated by spaces. `return code or default`,`{param type}`,`data type`,`comment`                    |
-| response    | As same as `success` and `failure` |
-| header      | Header in response that separated by spaces. `return code`,`{param type}`,`data type`,`comment`                            |
-| router      | Path definition that separated by spaces. `path`,`[httpMethod]`                                                            |
-| x-name      | The extension key, must be start by x- and take only json value.                                                           |
-| x-codeSample      | Optional Markdown usage. take `file` as parameter. This will then search for a file named like the summary in the given folder.                                      |
-| deprecated  | Mark endpoint as deprecated.                                                                                               |
+| annotation           | description                                                                                                                                                                                        |
+| -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| description          | A verbose explanation of the operation behavior.                                                                                                                                                   |
+| description.markdown | A short description of the application. The description will be read from a file named like endpointname.md                                                                                        | // @description.file endpoint.description.markdown |
+| id                   | A unique string used to identify the operation. Must be unique among all API operations.                                                                                                           |
+| tags                 | A list of tags to each API operation that separated by commas.                                                                                                                                     |
+| summary              | A short summary of what the operation does.                                                                                                                                                        |
+| accept               | A list of MIME types the APIs can consume. Note that Accept only affects operations with a request body, such as POST, PUT and PATCH.  Value MUST be as described under [Mime Types](#mime-types). |
+| produce              | A list of MIME types the APIs can produce. Value MUST be as described under [Mime Types](#mime-types).                                                                                             |
+| param                | Parameters that separated by spaces. `param name`,`param type`,`data type`,`is mandatory?`,`comment` `attribute(optional)`                                                                         |
+| security             | [Security](#security) to each API operation.                                                                                                                                                       |
+| success              | Success response that separated by spaces. `return code or default`,`{param type}`,`data type`,`comment`                                                                                           |
+| failure              | Failure response that separated by spaces. `return code or default`,`{param type}`,`data type`,`comment`                                                                                           |
+| response             | As same as `success` and `failure`                                                                                                                                                                 |
+| header               | Header in response that separated by spaces. `return code`,`{param type}`,`data type`,`comment`                                                                                                    |
+| router               | Path definition that separated by spaces. `path`,`[httpMethod]`                                                                                                                                    |
+| x-name               | The extension key, must be start by x- and take only json value.                                                                                                                                   |
+| x-codeSample         | Optional Markdown usage. take `file` as parameter. This will then search for a file named like the summary in the given folder.                                                                    |
+| deprecated           | Mark endpoint as deprecated.                                                                                                                                                                       |
 
 
 
@@ -407,7 +407,7 @@ When a short string in your documentation is insufficient, or you need images, c
 Besides that, `swag` also accepts aliases for some MIME Types as follows:
 
 | Alias                 | MIME Type                         |
-|-----------------------|-----------------------------------|
+| --------------------- | --------------------------------- |
 | json                  | application/json                  |
 | xml                   | text/xml                          |
 | plain                 | text/plain                        |
@@ -440,18 +440,18 @@ Besides that, `swag` also accepts aliases for some MIME Types as follows:
 - user defined struct
 
 ## Security
-| annotation | description | parameters | example |
-|------------|-------------|------------|---------|
-| securitydefinitions.basic  | [Basic](https://swagger.io/docs/specification/2-0/authentication/basic-authentication/) auth.  |                                   | // @securityDefinitions.basic BasicAuth                      |
-| securitydefinitions.apikey | [API key](https://swagger.io/docs/specification/2-0/authentication/api-keys/) auth.            | in, name                          | // @securityDefinitions.apikey ApiKeyAuth                    |
-| securitydefinitions.oauth2.application  | [OAuth2 application](https://swagger.io/docs/specification/authentication/oauth2/) auth.       | tokenUrl, scope                   | // @securitydefinitions.oauth2.application OAuth2Application |
-| securitydefinitions.oauth2.implicit     | [OAuth2 implicit](https://swagger.io/docs/specification/authentication/oauth2/) auth.          | authorizationUrl, scope           | // @securitydefinitions.oauth2.implicit OAuth2Implicit       |
-| securitydefinitions.oauth2.password     | [OAuth2 password](https://swagger.io/docs/specification/authentication/oauth2/) auth.          | tokenUrl, scope                   | // @securitydefinitions.oauth2.password OAuth2Password       |
-| securitydefinitions.oauth2.accessCode   | [OAuth2 access code](https://swagger.io/docs/specification/authentication/oauth2/) auth.       | tokenUrl, authorizationUrl, scope | // @securitydefinitions.oauth2.accessCode OAuth2AccessCode   |
+| annotation                             | description                                                                                   | parameters                        | example                                                      |
+| -------------------------------------- | --------------------------------------------------------------------------------------------- | --------------------------------- | ------------------------------------------------------------ |
+| securitydefinitions.basic              | [Basic](https://swagger.io/docs/specification/2-0/authentication/basic-authentication/) auth. |                                   | // @securityDefinitions.basic BasicAuth                      |
+| securitydefinitions.apikey             | [API key](https://swagger.io/docs/specification/2-0/authentication/api-keys/) auth.           | in, name                          | // @securityDefinitions.apikey ApiKeyAuth                    |
+| securitydefinitions.oauth2.application | [OAuth2 application](https://swagger.io/docs/specification/authentication/oauth2/) auth.      | tokenUrl, scope                   | // @securitydefinitions.oauth2.application OAuth2Application |
+| securitydefinitions.oauth2.implicit    | [OAuth2 implicit](https://swagger.io/docs/specification/authentication/oauth2/) auth.         | authorizationUrl, scope           | // @securitydefinitions.oauth2.implicit OAuth2Implicit       |
+| securitydefinitions.oauth2.password    | [OAuth2 password](https://swagger.io/docs/specification/authentication/oauth2/) auth.         | tokenUrl, scope                   | // @securitydefinitions.oauth2.password OAuth2Password       |
+| securitydefinitions.oauth2.accessCode  | [OAuth2 access code](https://swagger.io/docs/specification/authentication/oauth2/) auth.      | tokenUrl, authorizationUrl, scope | // @securitydefinitions.oauth2.accessCode OAuth2AccessCode   |
 
 
 | parameters annotation | example                                                  |
-|-----------------------|----------------------------------------------------------|
+| --------------------- | -------------------------------------------------------- |
 | in                    | // @in header                                            |
 | name                  | // @name Authorization                                   |
 | tokenUrl              | // @tokenUrl https://example.com/oauth/token             |
@@ -484,28 +484,28 @@ type Foo struct {
 
 ### Available
 
-Field Name | Type | Description
----|:---:|---
-<a name="validate"></a>validate | `string` | 	Determines the validation for the parameter. Possible values are: `required`. 
-<a name="parameterDefault"></a>default | * | Declares the value of the parameter that the server will use if none is provided, for example a "count" to control the number of results per page might default to 100 if not supplied by the client in the request. (Note: "default" has no meaning for required parameters.)  See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-6.2. Unlike JSON Schema this value MUST conform to the defined [`type`](#parameterType) for this parameter.
-<a name="parameterMaximum"></a>maximum | `number` | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.1.2.
-<a name="parameterMinimum"></a>minimum | `number` | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.1.3.
-<a name="parameterMultipleOf"></a>multipleOf | `number` | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.1.1.
-<a name="parameterMaxLength"></a>maxLength | `integer` | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.2.1.
-<a name="parameterMinLength"></a>minLength | `integer` | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.2.2.
-<a name="parameterEnums"></a>enums | [\*] | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.5.1.
-<a name="parameterFormat"></a>format | `string` | The extending format for the previously mentioned [`type`](#parameterType). See [Data Type Formats](https://swagger.io/specification/v2/#dataTypeFormat) for further details.
-<a name="parameterCollectionFormat"></a>collectionFormat | `string` |Determines the format of the array if type array is used. Possible values are: <ul><li>`csv` - comma separated values `foo,bar`. <li>`ssv` - space separated values `foo bar`. <li>`tsv` - tab separated values `foo\tbar`. <li>`pipes` - pipe separated values <code>foo&#124;bar</code>. <li>`multi` - corresponds to multiple parameter instances instead of multiple values for a single instance `foo=bar&foo=baz`. This is valid only for parameters [`in`](#parameterIn) "query" or "formData". </ul> Default value is `csv`.
-<a name="parameterExtensions"></a>extensions | `string` | Add extension to parameters.
+| Field Name                                               |   Type    | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| -------------------------------------------------------- | :-------: | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| <a name="validate"></a>validate                          | `string`  | Determines the validation for the parameter. Possible values are: `required`.                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| <a name="parameterDefault"></a>default                   |     *     | Declares the value of the parameter that the server will use if none is provided, for example a "count" to control the number of results per page might default to 100 if not supplied by the client in the request. (Note: "default" has no meaning for required parameters.)  See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-6.2. Unlike JSON Schema this value MUST conform to the defined [`type`](#parameterType) for this parameter.                                                              |
+| <a name="parameterMaximum"></a>maximum                   | `number`  | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.1.2.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| <a name="parameterMinimum"></a>minimum                   | `number`  | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.1.3.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| <a name="parameterMultipleOf"></a>multipleOf             | `number`  | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.1.1.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| <a name="parameterMaxLength"></a>maxLength               | `integer` | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.2.1.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| <a name="parameterMinLength"></a>minLength               | `integer` | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.2.2.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| <a name="parameterEnums"></a>enums                       |   [\*]    | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.5.1.                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| <a name="parameterFormat"></a>format                     | `string`  | The extending format for the previously mentioned [`type`](#parameterType). See [Data Type Formats](https://swagger.io/specification/v2/#dataTypeFormat) for further details.                                                                                                                                                                                                                                                                                                                                                        |
+| <a name="parameterCollectionFormat"></a>collectionFormat | `string`  | Determines the format of the array if type array is used. Possible values are: <ul><li>`csv` - comma separated values `foo,bar`. <li>`ssv` - space separated values `foo bar`. <li>`tsv` - tab separated values `foo\tbar`. <li>`pipes` - pipe separated values <code>foo&#124;bar</code>. <li>`multi` - corresponds to multiple parameter instances instead of multiple values for a single instance `foo=bar&foo=baz`. This is valid only for parameters [`in`](#parameterIn) "query" or "formData". </ul> Default value is `csv`. |
+| <a name="parameterExtensions"></a>extensions             | `string`  | Add extension to parameters.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
 
 ### Future
 
-Field Name | Type | Description
----|:---:|---
-<a name="parameterPattern"></a>pattern | `string` | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.2.3.
-<a name="parameterMaxItems"></a>maxItems | `integer` | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.3.2.
-<a name="parameterMinItems"></a>minItems | `integer` | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.3.3.
-<a name="parameterUniqueItems"></a>uniqueItems | `boolean` | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.3.4.
+| Field Name                                     |   Type    | Description                                                                        |
+| ---------------------------------------------- | :-------: | ---------------------------------------------------------------------------------- |
+| <a name="parameterPattern"></a>pattern         | `string`  | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.2.3. |
+| <a name="parameterMaxItems"></a>maxItems       | `integer` | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.3.2. |
+| <a name="parameterMinItems"></a>minItems       | `integer` | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.3.3. |
+| <a name="parameterUniqueItems"></a>uniqueItems | `boolean` | See https://tools.ietf.org/html/draft-fge-json-schema-validation-00#section-5.3.4. |
 
 ## Examples
 
@@ -648,7 +648,7 @@ So, generated swagger doc as follows:
 ```
 
 ### Use swaggertype tag to supported custom type
-[#201](https://github.com/swaggo/swag/issues/201#issuecomment-475479409)
+[#201](https://github.com/piiano/swag/issues/201#issuecomment-475479409)
 
 ```go
 type TimestampTime struct {
@@ -684,7 +684,7 @@ type Account struct {
 }
 ```
 
-[#379](https://github.com/swaggo/swag/issues/379)
+[#379](https://github.com/piiano/swag/issues/379)
 ```go
 type CerticateKeyPair struct {
 	Crt []byte `json:"crt" swaggertype:"string" format:"base64" example:"U3dhZ2dlciByb2Nrcw=="`
@@ -838,7 +838,7 @@ This project was inspired by [yvasiyarov/swagger](https://github.com/yvasiyarov/
 ## Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/swaggo/swag/graphs/contributors"><img src="https://opencollective.com/swag/contributors.svg?width=890&button=false" /></a>
+<a href="https://github.com/piiano/swag/graphs/contributors"><img src="https://opencollective.com/swag/contributors.svg?width=890&button=false" /></a>
 
 
 ## Backers

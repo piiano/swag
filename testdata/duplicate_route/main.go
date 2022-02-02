@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/swaggo/swag/testdata/duplicate_route/api"
+	"github.com/piiano/swag/testdata/duplicate_route/api"
 )
 
 func main() {
