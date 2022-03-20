@@ -1493,11 +1493,6 @@ func defineTypeOfExample(schemaType, arrayType, exampleValue string) (interface{
 // GetAllGoFileInfo gets all Go source files information for given searchDir.
 func (parser *Parser) getAllGoFileInfo(packageDir, searchDir string) error {
 	return filepath.Walk(searchDir, func(path string, f os.FileInfo, err error) error {
-		fmt.Println("walk", path, f, err)
-		if err != nil {
-			return nil
-		}
-
 		if err := parser.Skip(path, f); err != nil {
 			return err
 		}
