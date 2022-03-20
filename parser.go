@@ -1254,6 +1254,16 @@ func (parser *Parser) parseStruct(file *ast.File, fields *ast.FieldList) (*spec.
 }
 
 func (parser *Parser) parseStructField(file *ast.File, field *ast.Field) (map[string]spec.Schema, []string, error) {
+	if idt, ok := field.Type.(*ast.Ident); ok {
+		if idt.Name == "any" {
+			field.Type = ast.Expr(&ast.InterfaceType{
+				Interface:  0,
+				Methods:    &ast.FieldList{},
+				Incomplete: false,
+			})
+		}
+	}
+
 	if field.Names == nil {
 		if field.Tag != nil {
 			skip, ok := reflect.StructTag(strings.ReplaceAll(field.Tag.Value, "`", "")).Lookup("swaggerignore")
