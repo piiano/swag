@@ -337,6 +337,7 @@ func (parser *Parser) ParseAPIMultiSearchDir(searchDirs []string, mainAPIFile st
 	return parser.checkOperationIDUniqueness()
 }
 
+// ResolveDepsInDir .
 func (*Parser) ResolveDepsInDir(t *depth.Tree, dir string, pkgName string) error {
 	pwd, err := os.Getwd()
 	if err != nil {
