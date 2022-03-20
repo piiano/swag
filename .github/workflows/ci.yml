@@ -40,11 +40,11 @@ jobs:
         working-directory: ./src/github.com/${{ github.repository }}
         env:
           GOPATH: ${{ runner.workspace }}
-      - name: test
-        working-directory: ./src/github.com/${{ github.repository }}
-        run: make test
-        env:
-          GOPATH: ${{ runner.workspace }}
-      - name: coverage
-        working-directory: ./src/github.com/${{ github.repository }}
-        run: bash <(curl -s https://codecov.io/bash)
+      # - name: test
+      #   working-directory: ./src/github.com/${{ github.repository }}
+      #   run: make test
+      #   env:
+      #     GOPATH: ${{ runner.workspace }}
+      # - name: coverage
+      #   working-directory: ./src/github.com/${{ github.repository }}
+      #   run: bash <(curl -s https://codecov.io/bash)

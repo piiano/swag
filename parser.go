@@ -337,6 +337,7 @@ func (parser *Parser) ParseAPIMultiSearchDir(searchDirs []string, mainAPIFile st
 	return parser.checkOperationIDUniqueness()
 }
 
+// ResolveDepsInDir .
 func (*Parser) ResolveDepsInDir(t *depth.Tree, dir string, pkgName string) error {
 	pwd, err := os.Getwd()
 	if err != nil {
@@ -1159,6 +1160,16 @@ func (parser *Parser) parseStruct(file *ast.File, fields *ast.FieldList) (*spec.
 }
 
 func (parser *Parser) parseStructField(file *ast.File, field *ast.Field) (map[string]spec.Schema, []string, error) {
+	if idt, ok := field.Type.(*ast.Ident); ok {
+		if idt.Name == "any" {
+			field.Type = ast.Expr(&ast.InterfaceType{
+				Interface:  0,
+				Methods:    &ast.FieldList{},
+				Incomplete: false,
+			})
+		}
+	}
+
 	if field.Names == nil {
 		if field.Tag != nil {
 			skip, ok := reflect.StructTag(strings.ReplaceAll(field.Tag.Value, "`", "")).Lookup("swaggerignore")
@@ -1376,7 +1387,7 @@ func defineTypeOfExample(schemaType, arrayType, exampleValue string) (interface{
 
 // GetAllGoFileInfo gets all Go source files information for given searchDir.
 func (parser *Parser) getAllGoFileInfo(packageDir, searchDir string) error {
-	return filepath.Walk(searchDir, func(path string, f os.FileInfo, _ error) error {
+	return filepath.Walk(searchDir, func(path string, f os.FileInfo, err error) error {
 		if err := parser.Skip(path, f); err != nil {
 			return err
 		} else if f.IsDir() {
@@ -1479,11 +1490,13 @@ func (parser *Parser) checkOperationIDUniqueness() error {
 
 // Skip returns filepath.SkipDir error if match vendor and hidden folder.
 func (parser *Parser) Skip(path string, f os.FileInfo) error {
+	fmt.Println("skip", path, f)
 	return walkWith(parser.excludes, parser.ParseVendor)(path, f)
 }
 
 func walkWith(excludes map[string]struct{}, parseVendor bool) func(path string, fileInfo os.FileInfo) error {
 	return func(path string, f os.FileInfo) error {
+		fmt.Println("=========", path, f)
 		if f.IsDir() {
 			if !parseVendor && f.Name() == "vendor" || // ignore "vendor"
 				f.Name() == "docs" || // exclude docs
