@@ -1492,9 +1492,13 @@ func defineTypeOfExample(schemaType, arrayType, exampleValue string) (interface{
 
 // GetAllGoFileInfo gets all Go source files information for given searchDir.
 func (parser *Parser) getAllGoFileInfo(packageDir, searchDir string) error {
-	return filepath.Walk(searchDir, func(path string, f os.FileInfo, _ error) error {
-		err := parser.Skip(path, f)
+	return filepath.Walk(searchDir, func(path string, f os.FileInfo, err error) error {
+		fmt.Println("walk", path, f, err)
 		if err != nil {
+			return nil
+		}
+
+		if err := parser.Skip(path, f); err != nil {
 			return err
 		}
 
@@ -1605,11 +1609,13 @@ func (parser *Parser) checkOperationIDUniqueness() error {
 
 // Skip returns filepath.SkipDir error if match vendor and hidden folder.
 func (parser *Parser) Skip(path string, f os.FileInfo) error {
+	fmt.Println("skip", path, f)
 	return walkWith(parser.excludes, parser.ParseVendor)(path, f)
 }
 
 func walkWith(excludes map[string]struct{}, parseVendor bool) func(path string, fileInfo os.FileInfo) error {
 	return func(path string, f os.FileInfo) error {
+		fmt.Println("=========", path, f)
 		if f.IsDir() {
 			if !parseVendor && f.Name() == "vendor" || // ignore "vendor"
 				f.Name() == "docs" || // exclude docs
