@@ -1604,7 +1604,6 @@ func (parser *Parser) checkOperationIDUniqueness() error {
 
 // Skip returns filepath.SkipDir error if match vendor and hidden folder.
 func (parser *Parser) Skip(path string, f os.FileInfo) error {
-	fmt.Println("skip", path, f)
 	return walkWith(parser.excludes, parser.ParseVendor)(path, f)
 }
 
