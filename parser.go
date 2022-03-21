@@ -1496,7 +1496,6 @@ func (parser *Parser) Skip(path string, f os.FileInfo) error {
 
 func walkWith(excludes map[string]struct{}, parseVendor bool) func(path string, fileInfo os.FileInfo) error {
 	return func(path string, f os.FileInfo) error {
-		fmt.Println("=========", path, f)
 		if f.IsDir() {
 			if !parseVendor && f.Name() == "vendor" || // ignore "vendor"
 				f.Name() == "docs" || // exclude docs
